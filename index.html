@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>San Valentín 💖</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script&family=Lobster&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Lobster", cursive;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        background: linear-gradient(to right, #e6e6fa, #ee9ca7, #c084fc);
+        background-size: 200% 200%;
+        animation: gradientMove 8s ease infinite;
+        color: #e6e6fa;
+        overflow-x: hidden;
+      }
+      @keyframes gradientMove {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* ===== Tarjeta ===== */
+      .card {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 2em;
+        margin: 2em auto;
+        width: 90%;
+        max-width: 600px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        position: relative;
+        z-index: 2;
+      }
+
+      h1 {
+        font-size: 7w; /* escala con pantalla */
+        margin-bottom: 0.5em;
+        color: #fff;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+      }
+
+      .mensaje {
+        font-size: 6vw;
+        margin-bottom: 2em;
+        color: #fff;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+      }
+
+      .dedicatoria {
+        font-size: 4vw;
+        margin-top: 5em;
+        color: #fff;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        display: inline-block;
+        white-space: pre-wrap;
+        overflow: hidden;
+      }
+
+      /* ===== Animaciones: corazon, cupido, ramo ===== */
+      .corazon {
+        position: absolute;
+        top: 375px; /* ajusta la altura que quieras */
+        right: 275px; /* lo pegamos al lado derecho */
+        opacity: 0;
+        animation: fadeIn 3s ease-in-out forwards;
+        max-width: 95px; /* tamaño fijo o relativo */
+        height: auto;
+      }
+      .cupido,
+      .ramo {
+        margin: 1em auto;
+        opacity: 0;
+        animation: fadeIn 3s ease-in-out forwards;
+        max-width: 80%;
+        height: auto;
+      }
+
+      .corazon img,
+      .cupido img,
+      .ramo img {
+        width: 100%;
+        height: auto;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      /* ===== Reproductor de audio ===== */
+      .audio-player {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 1em;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        padding: 1em;
+        margin: 2em 0;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+      }
+
+      .audio-player button {
+        background: #ff6699;
+        border: none;
+        color: white;
+        font-size: 1.5em;
+        border-radius: 50%;
+        width: 3em;
+        height: 3em;
+        cursor: pointer;
+        transition:
+          transform 0.2s ease,
+          background 0.3s ease;
+      }
+
+      .audio-player button:hover {
+        transform: scale(1.1);
+        background: #ff3366;
+      }
+
+      .audio-player input[type="range"] {
+        flex: 1;
+        min-width: 100px;
+        height: 6px;
+        border-radius: 5px;
+        background: linear-gradient(to right, #ff6699, #ff3366);
+        outline: none;
+        cursor: pointer;
+      }
+
+      .audio-player input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #fff;
+        border: 2px solid #ff3366;
+        cursor: pointer;
+      }
+
+      .audio-player span {
+        color: #fff;
+        font-size: 1em;
+        font-weight: bold;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      }
+
+      /* ===== Mensaje secreto ===== */
+      .mensaje-secreto {
+        margin-top: 2em;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+        padding: 1em;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+
+      .mensaje-secreto h3 {
+        font-family: "Great Vibes", cursive;
+        font-size: 1.5em;
+        color: #ff3366;
+        margin-bottom: 0.5em;
+      }
+
+      .mensaje-secreto textarea {
+        width: 100%;
+        border-radius: 10px;
+        border: none;
+        padding: 0.8em;
+        font-size: 1em;
+        font-family: "Dancing Script", cursive;
+        resize: none;
+      }
+
+      .mensaje-secreto button {
+        margin-top: 0.5em;
+        background: #ff6699;
+        border: none;
+        color: white;
+        padding: 0.5em 1em;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .mensaje-secreto button:hover {
+        background: #ff3366;
+      }
+
+      /* ===== Corazones flotando ===== */
+      .hearts {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        overflow: hidden;
+      }
+
+      .heart {
+        width: 20px;
+        height: 20px;
+        background: rgba(255, 0, 0, 0.7);
+        position: absolute;
+        top: -20px;
+        transform: rotate(45deg);
+        animation: float 10s infinite ease-in-out;
+      }
+      .heart::before,
+      .heart::after {
+        content: "";
+        width: 20px;
+        height: 20px;
+        background: rgba(255, 0, 0, 0.7);
+        border-radius: 50%;
+        position: absolute;
+      }
+      .heart::before {
+        top: -10px;
+        left: 0;
+      }
+      .heart::after {
+        left: 10px;
+        top: 0;
+      }
+      .heart:nth-child(1) {
+        left: 10%;
+        animation-delay: 0s;
+      }
+      .heart:nth-child(2) {
+        left: 20%;
+        animation-delay: 2s;
+      }
+      .heart:nth-child(3) {
+        left: 30%;
+        animation-delay: 4s;
+      }
+      .heart:nth-child(4) {
+        left: 40%;
+        animation-delay: 1s;
+      }
+      .heart:nth-child(5) {
+        left: 50%;
+        animation-delay: 3s;
+      }
+      .heart:nth-child(6) {
+        left: 60%;
+        animation-delay: 5s;
+      }
+      .heart:nth-child(7) {
+        left: 70%;
+        animation-delay: 2.5s;
+      }
+      .heart:nth-child(8) {
+        left: 80%;
+        animation-delay: 4.5s;
+      }
+      .heart:nth-child(9) {
+        left: 90%;
+        animation-delay: 6s;
+      }
+      .heart:nth-child(10) {
+        left: 95%;
+        animation-delay: 1.5s;
+      }
+      @keyframes float {
+        0% {
+          transform: translateY(0) rotate(45deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(800px) rotate(45deg);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Corazones flotando -->
+    <div class="hearts">
+      <div class="heart"></div>
+      <div class="heart"></div>
+      <div class="heart"></div>
+      <div class="heart"></div>
+      <div class="heart"></div>
+      <div class="heart"></div>
+      <div class="heart"></div>
+      <div class="heart"></div>
+      <div class="heart"></div>
+      <div class="heart"></div>
+    </div>
+
+    <!-- Tarjeta principal -->
+    <div class="card">
+      <h1 id="titulo"></h1>
+      <p class="mensaje">Para ti Bonita, con Cariño</p>
+
+      <div class="corazon">
+        <img src="corazon.gif" alt="corazón" />
+      </div>
+
+      <div class="cupido">
+        <img src="cupido.gif" alt="cupido" />
+      </div>
+
+      <div class="audio-player">
+        <audio id="player" src="佩奇的夏天 - 阁楼演奏班.mp3"></audio>
+        <button id="playPause">▶</button>
+        <input type="range" id="progress" value="0" step="1" />
+        <span id="time">0:00</span>
+      </div>
+
+      <p id="dedicatoria" class="dedicatoria"></p>
+
+      <div class="ramo">
+        <img src="ramo de flores .gif" alt="ramo de flores" />
+      </div>
+
+      <div class="mensaje-secreto">
+        <h3>💌 Escribe tu mensaje para mí:</h3>
+        <textarea
+          id="mensajeSecreto"
+          rows="4"
+          placeholder="Tu mensaje aquí..."
+        ></textarea>
+        <button onclick="enviarCorreo()">Guardar</button>
+      </div>
+    </div>
+
+    <script>
+      const tituloTexto = "💕 Feliz San Valentín 💕";
+      const dedicatoriaTexto =
+        "Desde que llegaste a mi vida, cada día se llena de colores y alegría. Eres mi razón de sonreír, mi inspiración y mi paz. Hoy quiero recordarte que mi amor florece como un ramo de gerberas que siempre te espera… 💖";
+
+      const titulo = document.getElementById("titulo");
+      const dedicatoria = document.getElementById("dedicatoria");
+      let i = 0,
+        j = 0;
+
+      function escribirTitulo() {
+        if (i < tituloTexto.length) {
+          titulo.textContent += tituloTexto.charAt(i);
+          i++;
+          setTimeout(escribirTitulo, 100);
+        } else {
+          escribirDedicatoria();
+        }
+      }
+
+      function escribirDedicatoria() {
+        if (j < dedicatoriaTexto.length) {
+          dedicatoria.textContent += dedicatoriaTexto.charAt(j);
+          j++;
+          setTimeout(escribirDedicatoria, 50);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        escribirTitulo();
+        emailjs.init("5gEV_n0OoMSzT6Bw9");
+
+        const player = document.getElementById("player");
+        const playPause = document.getElementById("playPause");
+        const progress = document.getElementById("progress");
+        const time = document.getElementById("time");
+
+        player.addEventListener("loadedmetadata", () => {
+          progress.max = player.duration;
+        });
+        playPause.addEventListener("click", () => {
+          if (player.paused) {
+            player.play();
+            playPause.textContent = "⏸";
+          } else {
+            player.pause();
+            playPause.textContent = "▶";
+          }
+        });
+        player.addEventListener("timeupdate", () => {
+          progress.value = player.currentTime;
+          let min = Math.floor(player.currentTime / 60);
+          let sec = Math.floor(player.currentTime % 60);
+          if (sec < 10) sec = "0" + sec;
+          time.textContent = `${min}:${sec}`;
+        });
+        progress.addEventListener("input", () => {
+          player.currentTime = progress.value;
+        });
+      });
+
+      function enviarCorreo() {
+        const mensaje = document.getElementById("mensajeSecreto").value;
+        if (!mensaje.trim()) {
+          alert("Escribe un mensaje primero 💌");
+          return;
+        }
+        emailjs
+          .send("service_31usrqo", "template_rp7wlhf", {
+            name: "Karla",
+            mensaje: mensaje,
+          })
+          .then(() => {
+            alert("💖 Tu mensaje fue enviado correctamente.");
+            document.getElementById("mensajeSecreto").value = "";
+          })
+          .catch((err) => {
+            console.error(err);
+            alert("Hubo un problema al enviar el mensaje.");
+          });
+      }
+    </script>
+  </body>
+</html>
